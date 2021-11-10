@@ -7,11 +7,11 @@ import propTypes from 'prop-types';
 export const DeckCard = ({ title, cards, ...rest }) => {
     return (
         <TouchableOpacity
-            style={styles.card}
+            style={styles.container}
             activeOpacity={0.8}
             {...rest}
         >
-            <View>
+            <View style={styles.row}>
                 <Text style={styles.heading}>{title || "Card Title"}</Text>
                 <Text style={styles.description}>({cards || 0}) cards</Text>
             </View>
@@ -20,12 +20,15 @@ export const DeckCard = ({ title, cards, ...rest }) => {
 }
 
 const styles = StyleSheet.create({
-    card: {
+    container: {
         padding: 50,
         backgroundColor: white,
         borderRadius: 10,
-        alignItems: 'center',
         marginBottom: 10,
+    },
+    row: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     heading: {
         fontSize: 28,
