@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { white } from '../utils';
-import propTypes from 'prop-types';
 
 export const DeckCard = ({ title, cards, ...rest }) => {
     return (
@@ -42,5 +41,5 @@ const styles = StyleSheet.create({
 
 DeckCard.propTypes = {
     title: PropTypes.string,
-    cards: propTypes.number
+    cards: PropTypes.number
 }
