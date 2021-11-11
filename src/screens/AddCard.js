@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, TextInput, StyleSheet, Text, View } from 'react-native';
+import { TextInput, StyleSheet, Text, View } from 'react-native';
 import { Button, Container } from '../components';
+import { saveCardToDeck } from '../services/api';
 import { lightGray, white } from '../utils';
 
 const AddCard = ({ route, navigation }) => {
@@ -9,16 +10,34 @@ const AddCard = ({ route, navigation }) => {
     const [answer, setAnswer] = useState('');
 
     function handleCreateCard() {
-        alert(JSON.stringify({
-            question,
-            answer,
-            deck
-        }));
+
+        const card = {
+            question: question,
+            answer: answer
+        }
+
+        // input validation
+        // check if both options are filled first
+        if (question && answer) {
+            // make sure they are unique
+            if (question === answer) {
+                alert("please fill in different options")
+            } else {
+                saveCardToDeck(deck, card)
+                    .then(() => {
+                        setQuestion('');
+                        setAnswer('');
+                        navigation.navigate('Deck Details', { title: deck });
+                    });
+            }
+        } else {
+            alert("Please fill answers for both options");
+        }
     }
 
     return (
         <Container>
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 <View style={[styles.row, { marginTop: 20 }]}>
                     <Text style={styles.heading}>Add Card</Text>
                     <Text style={styles.description}>Please fill in details for the card</Text>
@@ -50,7 +69,7 @@ const AddCard = ({ route, navigation }) => {
                         onPress={() => handleCreateCard()}
                     />
                 </View>
-            </SafeAreaView>
+            </View>
         </Container>
     )
 }
