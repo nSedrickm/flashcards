@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { white, red } from '../utils';
 import { Button } from './Button';
+import PropTypes from 'prop-types';
 
-export const QuizCard = () => {
+export const QuizCard = ({ card, answerFunc }) => {
+    const { question, answer } = card;
     const [toggle, setToggle] = useState(false)
 
     function toggleAnswer() {
@@ -12,18 +14,18 @@ export const QuizCard = () => {
 
     return (
         <View style={styles.container}>
-            {toggle ? (
+            {!toggle ? (
                 <View style={[styles.row, { marginTop: 25 }]}>
-                    <Text style={styles.heading}>Question Question Question</Text>
+                    <Text style={styles.heading}>{question}</Text>
                     <TouchableOpacity onPress={() => toggleAnswer()}>
-                        <Text style={styles.toggle}>{toggle ? "View Answer" : "View Question"}</Text>
+                        <Text style={styles.toggle}>View Answer</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
                 <View style={[styles.row, { marginTop: 25 }]}>
-                    <Text style={styles.heading}>Answer</Text>
+                    <Text style={styles.heading}>{answer}</Text>
                     <TouchableOpacity onPress={() => toggleAnswer()}>
-                        <Text style={styles.toggle}>{"View Question"}</Text>
+                        <Text style={styles.toggle}>View Question</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -32,9 +34,11 @@ export const QuizCard = () => {
                 <Button
                     text="incorrect"
                     type="secondary"
+                    onPress={() => answerFunc(false)}
                 />
                 <Button
                     text="correct"
+                    onPress={() => answerFunc(true)}
                 />
             </View>
         </View>
@@ -68,3 +72,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     }
 });
+
+QuizCard.propTypes = {
+    card: PropTypes.object.isRequired,
+    answerFunc: PropTypes.func.isRequired
+}
