@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Button, Container } from '../components';
-import { getDeck } from '../services/api';
-import { white } from '../utils';
+import { getDeck, deleteDeck } from '../services/api';
+import { white, red } from '../utils';
 
 const DeckDetails = ({ route, navigation }) => {
     const { title } = route.params;
@@ -10,16 +10,22 @@ const DeckDetails = ({ route, navigation }) => {
 
     useEffect(() => {
         getDeck(title)
-            .then(res =>  setDeck(res))
+            .then(res => setDeck(res))
     })
 
-
-    function addCard(title) {
+    function addCard() {
         navigation.navigate('Add Card', { deck: title })
     }
 
-    function startQuiz(title) {
+    function startQuiz() {
         navigation.navigate('Quiz', { deck: title })
+    }
+
+    function removeDeck() {
+        deleteDeck(title)
+            .then(() => {
+                navigation.navigate('Decks', { deck: title })
+            })
     }
 
     return (
@@ -34,12 +40,18 @@ const DeckDetails = ({ route, navigation }) => {
                     <Button
                         text="add card"
                         type="secondary"
-                        onPress={() => addCard(title)}
+                        onPress={() => addCard()}
                     />
                     <Button
                         text="start quiz"
-                        onPress={() => startQuiz(title)}
+                        onPress={() => startQuiz()}
                     />
+                </View>
+
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => removeDeck()}>
+                        <Text style={styles.deleteBtn}>delete deck</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </Container>
@@ -58,13 +70,19 @@ const styles = StyleSheet.create({
     },
     heading: {
         color: white,
-        fontSize: 42,
+        fontSize: 46,
         fontWeight: 'bold',
         marginBottom: 5,
     },
     description: {
         color: white,
-        fontSize: 24,
+        fontSize: 28,
+    },
+    deleteBtn: {
+        color: red,
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: 10
     }
 })
 
