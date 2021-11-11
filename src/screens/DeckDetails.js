@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, Container } from '../components';
+import { getDeck } from '../services/api';
 import { white } from '../utils';
 
 const DeckDetails = ({ route, navigation }) => {
     const { title } = route.params;
+    const [deck, setDeck] = useState('')
+
+    useEffect(() => {
+        getDeck(title)
+            .then(res =>  setDeck(res))
+    })
+
 
     function addCard(title) {
         navigation.navigate('Add Card', { deck: title })
@@ -18,8 +26,8 @@ const DeckDetails = ({ route, navigation }) => {
         <Container>
             <View style={styles.container}>
                 <View style={[styles.row, { marginTop: 80 }]}>
-                    <Text style={styles.heading}>{title}</Text>
-                    <Text style={styles.description}>(0) cards</Text>
+                    <Text style={styles.heading}>{deck?.title || 'title N/A'}</Text>
+                    <Text style={styles.description}>{deck.cards?.length || (0)} cards</Text>
                 </View>
 
                 <View style={styles.row}>
