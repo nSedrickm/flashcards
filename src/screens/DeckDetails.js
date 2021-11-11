@@ -42,10 +42,12 @@ const DeckDetails = ({ route, navigation }) => {
                         type="secondary"
                         onPress={() => addCard()}
                     />
-                    <Button
-                        text="start quiz"
-                        onPress={() => startQuiz()}
-                    />
+                    {deck.cards?.length > 0 &&
+                        < Button
+                            text="start quiz"
+                            onPress={() => startQuiz()}
+                        />
+                    }
                 </View>
 
                 <View style={styles.row}>
