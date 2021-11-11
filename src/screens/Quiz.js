@@ -1,28 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, Container, QuizCard } from '../components';
-import { red, white } from '../utils';
+import { getDeck } from '../services/api';
+import { red, white, formatQuiz } from '../utils';
 
 const Quiz = ({ route, navigation }) => {
     const { deck } = route.params;
-    const [complete, setComplete] = useState(false)
+    const [complete, setComplete] = useState(false);
+    const [current, setCurrent] = useState(0);
+    const [score, setScore] = useState(0);
+    const [quiz, setQuiz] = useState([]);
 
     function closeQuiz() {
         navigation.navigate('Deck Details', { title: deck })
     }
+
+    function scoreQuestion(solution) {
+        // calculate score
+        const nextQuestion = current + 1;
+        const { isCorrect } = quiz[current]
+        if (solution && isCorrect) {
+            setScore(score + 1);
+        }
+        if (nextQuestion < quiz.length) {
+            setCurrent(nextQuestion);
+        } else {
+            setComplete(true);
+        }
+    }
+
+    useEffect(() => {
+        getDeck(deck)
+            .then(res => {
+                setQuiz(res.cards);
+            })
+    }, [])
+
 
     return (
         <Container>
             <View style={styles.container}>
                 {!complete ? (
                     <View>
-                        <Text style={styles.description}>3/7</Text>
-                        <QuizCard />
+                        <Text style={styles.description}>{current + 1}/{quiz?.length}</Text>
+                        {quiz.length ? (
+                            <QuizCard
+                                card={quiz[current]}
+                                answerFunc={scoreQuestion}
+                            />
+                        ) : (
+                            <View style={[styles.row, { marginTop: 25 }]}>
+                                <Text style={styles.heading}>Quiz Loading</Text>
+                            </View>
+                        )}
                     </View>
                 ) : (
                     <>
                         <View style={[styles.row, { marginTop: 25 }]}>
                             <Text style={styles.heading}>Quiz Completed</Text>
+                            <Text style={styles.description}>You scored</Text>
+                            <Text style={styles.score}>{score}/{quiz?.length}</Text>
                         </View>
 
                         <View style={styles.row}>
@@ -60,11 +97,14 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: 'center'
     },
-    toggle: {
-        color: red,
-        fontSize: 18,
-        fontWeight: 'bold'
-    }
+    score: {
+        color: white,
+        fontSize: 56,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        marginTop: 20,
+        textAlign: 'center'
+    },
 });
 
 export default Quiz;
