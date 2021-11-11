@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { TextInput, StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Button, Container } from '../components';
 import { saveCardToDeck } from '../services/api';
@@ -41,47 +41,50 @@ const AddCard = ({ route, navigation }) => {
     return (
         <Container>
             <View style={styles.container}>
-                <View style={[styles.row, { marginTop: 20 }]}>
-                    <Text style={styles.heading}>Add Card</Text>
-                    <Text style={styles.description}>Please fill in details for the card</Text>
-                </View>
-                <View style={[styles.row, { marginTop: 40, marginBottom: 20 }]}>
-                    <Text style={styles.label}>Question</Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={setQuestion}
-                        value={question}
-                        placeholderTextColor={lightGray}
-                        placeholder="Question"
-                    />
-                </View>
+                <KeyboardAvoidingView behavior="position">
 
-                <View style={[styles.row, { marginBottom: 40 }]}>
-                    <Text style={styles.label}>Answer</Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={setAnswer}
-                        value={answer}
-                        placeholderTextColor={lightGray}
-                        placeholder="Answer"
-                    />
-                </View>
+                    <View style={[styles.row, { marginTop: 20 }]}>
+                        <Text style={styles.heading}>Add Card</Text>
+                        <Text style={styles.description}>Please fill in details for the card</Text>
+                    </View>
 
-                <View style={[styles.row, { marginBottom: 40 }]}>
-                    <Text style={styles.label}>Is the answer correct?</Text>
-                    <TouchableOpacity style={styles.picker}>
-                        <Picker
-                            style={{ color: white }}
-                            selectedValue={affirmation}
-                            onValueChange={(value) =>
-                                setAffirmation(value)
-                            }>
-                            <Picker.Item label="Yes" value={true} />
-                            <Picker.Item label="No" value={false} />
-                        </Picker>
-                    </TouchableOpacity>
+                    <View style={[styles.row, { marginTop: 40, marginBottom: 20 }]}>
+                        <Text style={styles.label}>Question</Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={setQuestion}
+                            value={question}
+                            placeholderTextColor={lightGray}
+                            placeholder="Question"
+                        />
+                    </View>
 
-                </View>
+                    <View style={[styles.row, { marginBottom: 20 }]}>
+                        <Text style={styles.label}>Answer</Text>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={setAnswer}
+                            value={answer}
+                            placeholderTextColor={lightGray}
+                            placeholder="Answer"
+                        />
+                    </View>
+
+                    <View style={[styles.row, { marginBottom: 20 }]}>
+                        <Text style={styles.label}>Is the answer correct?</Text>
+                        <TouchableOpacity style={styles.picker}>
+                            <Picker
+                                style={{ color: white }}
+                                selectedValue={affirmation}
+                                onValueChange={(value) =>
+                                    setAffirmation(value)
+                                }>
+                                <Picker.Item label="Yes" value={true} />
+                                <Picker.Item label="No" value={false} />
+                            </Picker>
+                        </TouchableOpacity>
+                    </View>
+                </KeyboardAvoidingView>
 
                 <View style={styles.row}>
                     <Button
