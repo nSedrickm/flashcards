@@ -2,12 +2,22 @@ import React, { useState } from 'react';
 import { SafeAreaView, TextInput, StyleSheet, Text, View } from 'react-native';
 import { Button, Container } from '../components';
 import { lightGray, white } from '../utils';
+import { saveDeckTitle } from '../services/api';
 
-const NewDeck = () => {
+const NewDeck = ({ navigation }) => {
     const [text, setText] = useState('');
 
     function handleCreateDeck() {
-        alert(text);
+        if (text) {
+            saveDeckTitle(text)
+                .then(() => {
+                    setText('');
+                    navigation.navigate('Deck Details', { title: text });
+                });
+
+        } else {
+            alert('Please fill in deck name')
+        }
     }
 
     return (
