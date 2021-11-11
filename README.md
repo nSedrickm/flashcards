@@ -1,6 +1,8 @@
 # Mobile Flashcard
 A react native quiz app
 
+# Platforms
+This app was built with Ubuntu 20.04 and run on a physical android device with Android v9
 ## Getting Started
 
 Clone the source code
