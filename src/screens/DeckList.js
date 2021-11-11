@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, DeckCard } from '../components';
-import { View } from 'react-native';
+import { FlatList } from 'react-native';
+import { getDecks } from '../services/api';
 
 const DeckList = ({ navigation }) => {
+
+    const [decks, setDecks] = useState([]);
+
+    useEffect(() => {
+        getDecks()
+            .then(res => setDecks(res))
+    })
 
     function viewDetails(title) {
         navigation.navigate('Deck Details', { title })
@@ -10,18 +18,17 @@ const DeckList = ({ navigation }) => {
 
     return (
         <Container>
-            <View>
-                <DeckCard
-                    title="First Deck"
-                    cards={4}
-                    onPress={() => viewDetails("First Deck")}
-                />
-                <DeckCard
-                    title="Second Deck"
-                    cards={2}
-                    onPress={() => viewDetails("Second Deck")}
-                />
-            </View>
+            <FlatList
+                data={decks}
+                keyExtractor={item => item.title}
+                renderItem={({ item }) => (
+                    <DeckCard
+                        title={item.title}
+                        cards={item.cards}
+                        onPress={() => viewDetails(item.title)}
+                    />
+                )}
+            />
         </Container>
     )
 }
