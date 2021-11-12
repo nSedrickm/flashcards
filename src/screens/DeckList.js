@@ -20,7 +20,7 @@ const DeckList = ({ navigation }) => {
 
     return (
         <Container>
-            {decks.length ? (
+            {decks?.length ? (
                 <FlatList
                     data={decks}
                     keyExtractor={item => item.title}

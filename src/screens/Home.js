@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { gray, yellow } from '../utils';
+import { setNotification } from '../services/notifications';
 import DeckList from './DeckList'
 import AddDeck from './AddDeck';
-import { gray, yellow } from '../utils';
 
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
-    const options = {
 
-    }
+    useEffect(() => {
+        setNotification();
+    }, [])
+
     return (
         <Tab.Navigator
             screenOptions={{
